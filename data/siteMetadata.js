@@ -1,28 +1,29 @@
 /** @type {import("pliny/config").PlinyConfig } */
 const siteMetadata = {
-  title: 'Next.js Starter Blog',
-  author: 'Tails Azimuth',
-  headerTitle: 'TailwindBlog',
-  description: 'A blog created with Next.js and Tailwind.css',
-  language: 'en-us',
+  title: '@dev_frogsoo blog',
+  author: 'dev_frogsoo',
+  headerTitle: '@dev_frogsoo.blog',
+  description:
+    '@dev_frogsoo의 블로그 입니다.\n\n개발 글을 포함하여 다양한 글을 남기기 위해 블로그를 만들었습니다.',
+  language: 'ko-kr',
   theme: 'system', // system, dark or light
-  siteUrl: 'https://tailwind-nextjs-starter-blog.vercel.app',
-  siteRepo: 'https://github.com/timlrx/tailwind-nextjs-starter-blog',
+  siteUrl: 'https://frogsoo.vercel.app/',
+  siteRepo: 'https://github.com/stu442/tailwind-css-starter-blog', // private repo
   siteLogo: `${process.env.BASE_PATH || ''}/static/images/logo.png`,
   socialBanner: `${process.env.BASE_PATH || ''}/static/images/twitter-card.png`,
-  mastodon: 'https://mastodon.social/@mastodonuser',
-  email: 'address@yoursite.com',
-  github: 'https://github.com',
-  x: 'https://twitter.com/x',
+  // mastodon: 'https://mastodon.social/@mastodonuser', // Not used
+  email: 'stu44229@gmail.com',
+  github: 'https://github.com/stu442',
+  // x: 'https://twitter.com/x', // not used
   // twitter: 'https://twitter.com/Twitter',
-  facebook: 'https://facebook.com',
-  youtube: 'https://youtube.com',
-  linkedin: 'https://www.linkedin.com',
-  threads: 'https://www.threads.net',
-  instagram: 'https://www.instagram.com',
-  medium: 'https://medium.com',
-  bluesky: 'https://bsky.app/',
-  locale: 'en-US',
+  // facebook: 'https://facebook.com', // not used
+  // youtube: 'https://youtube.com', // not used
+  linkedin: 'www.linkedin.com/in/민수-박-3b981029a',
+  threads: 'https://www.threads.com/@dev_frogsoo',
+  // instagram: 'https://www.instagram.com', // not used
+  // medium: 'https://medium.com', // not used
+  // bluesky: 'https://bsky.app/', // not used
+  locale: 'ko-kr',
   // set to true if you want a navbar fixed to the top
   stickyNav: false,
   analytics: {
@@ -52,7 +53,7 @@ const siteMetadata = {
   newsletter: {
     // supports mailchimp, buttondown, convertkit, klaviyo, revue, emailoctopus, beehive
     // Please add your .env file and modify it according to your selection
-    provider: 'buttondown',
+    // provider: 'buttondown',
   },
   comments: {
     // If you want to use an analytics provider you have to add it to the
