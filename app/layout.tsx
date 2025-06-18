@@ -57,7 +57,7 @@ export const metadata: Metadata = {
     images: [siteMetadata.socialBanner],
   },
   verification: {
-    google: 'google-site-verification=xlkkSVVKmk33phIIiNQtAjV9DW8_D5oXxoIN-bdhyrE',
+    google: 'bEw_KFaHiQniSnMMw7E_TiN-64T8fnDq2bR4Zj61kmw',
     other: {
       naver: '1b989840e3dcf1039a13982735717488ce5869bd',
     },
