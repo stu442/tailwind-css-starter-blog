@@ -173,3 +173,8 @@ input:-webkit-autofill:focus {
   display: inline-block;
   vertical-align: middle;
 }
+
+/* font size setting */
+.prose {
+  font-size: 1.15rem;
+}
