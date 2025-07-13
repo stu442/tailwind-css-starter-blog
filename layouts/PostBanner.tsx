@@ -9,6 +9,8 @@ import PageTitle from '@/components/PageTitle'
 import SectionContainer from '@/components/SectionContainer'
 import siteMetadata from '@/data/siteMetadata'
 import ScrollTopAndComment from '@/components/ScrollTopAndComment'
+import ReadingTime from '@/components/ReadingTime'
+import { formatDate } from 'pliny/utils/formatDate'
 
 interface LayoutProps {
   content: CoreContent<Blog>
@@ -18,7 +20,7 @@ interface LayoutProps {
 }
 
 export default function PostMinimal({ content, next, prev, children }: LayoutProps) {
-  const { slug, title, images } = content
+  const { slug, title, images, date, readingTime } = content
   const displayImage =
     images && images.length > 0 ? images[0] : 'https://picsum.photos/seed/picsum/800/400'
 
@@ -37,6 +39,13 @@ export default function PostMinimal({ content, next, prev, children }: LayoutPro
             </div>
             <div className="relative pt-10">
               <PageTitle>{title}</PageTitle>
+              <dl className="pt-4">
+                <dd className="text-base leading-6 font-medium text-gray-500 dark:text-gray-400">
+                  <time dateTime={date}>{formatDate(date, siteMetadata.locale)}</time>
+                  {' • '}
+                  <ReadingTime readingTime={readingTime} />
+                </dd>
+              </dl>
             </div>
           </div>
           <div className="prose dark:prose-invert max-w-none py-4">{children}</div>
