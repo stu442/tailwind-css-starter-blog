@@ -1,13 +1,13 @@
 {
-  "mermaid": 1,
   "programming": 5,
+  "reflection": 1,
+  "go": 1,
+  "language": 1,
+  "mermaid": 1,
   "productivity": 1,
   "ai": 3,
   "stoic": 1,
   "developer": 1,
   "career": 1,
-  "go": 1,
-  "language": 1,
-  "product": 2,
-  "reflection": 1
+  "product": 2
 }

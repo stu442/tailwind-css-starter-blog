@@ -9,11 +9,18 @@ import { sortPosts } from 'pliny/utils/contentlayer.js'
 
 const outputFolder = process.env.EXPORT ? 'out' : 'public'
 
+// Helper function to join URL segments without double slashes
+const joinUrl = (base, path) => {
+  const cleanBase = base.replace(/\/$/, '')
+  const cleanPath = path.replace(/^\//, '')
+  return `${cleanBase}/${cleanPath}`
+}
+
 const generateRssItem = (config, post) => `
   <item>
-    <guid>${config.siteUrl}/blog/${post.slug}</guid>
+    <guid>${joinUrl(config.siteUrl, `blog/${post.slug}`)}</guid>
     <title>${escape(post.title)}</title>
-    <link>${config.siteUrl}/blog/${post.slug}</link>
+    <link>${joinUrl(config.siteUrl, `blog/${post.slug}`)}</link>
     ${post.summary && `<description>${escape(post.summary)}</description>`}
     <pubDate>${new Date(post.date).toUTCString()}</pubDate>
     <author>${config.email} (${config.author})</author>
@@ -25,13 +32,13 @@ const generateRss = (config, posts, page = 'feed.xml') => `
   <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
       <title>${escape(config.title)}</title>
-      <link>${config.siteUrl}/blog</link>
+      <link>${joinUrl(config.siteUrl, 'blog')}</link>
       <description>${escape(config.description)}</description>
       <language>${config.language}</language>
       <managingEditor>${config.email} (${config.author})</managingEditor>
       <webMaster>${config.email} (${config.author})</webMaster>
       <lastBuildDate>${new Date(posts[0].date).toUTCString()}</lastBuildDate>
-      <atom:link href="${config.siteUrl}/${page}" rel="self" type="application/rss+xml"/>
+      <atom:link href="${joinUrl(config.siteUrl, page)}" rel="self" type="application/rss+xml"/>
       ${posts.map((post) => generateRssItem(config, post)).join('')}
     </channel>
   </rss>

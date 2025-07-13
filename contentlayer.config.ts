@@ -24,6 +24,7 @@ import rehypePrismPlus from 'rehype-prism-plus'
 import rehypePresetMinify from 'rehype-preset-minify'
 import siteMetadata from './data/siteMetadata'
 import { allCoreContent, sortPosts } from 'pliny/utils/contentlayer.js'
+import { joinUrl } from './lib/utils'
 import prettier from 'prettier'
 import remarkBreaks from 'remark-breaks'
 
@@ -123,7 +124,7 @@ export const Blog = defineDocumentType(() => ({
         dateModified: doc.lastmod || doc.date,
         description: doc.summary,
         image: doc.images ? doc.images[0] : siteMetadata.socialBanner,
-        url: `${siteMetadata.siteUrl}/${doc._raw.flattenedPath}`,
+        url: joinUrl(siteMetadata.siteUrl, doc._raw.flattenedPath),
       }),
     },
   },
@@ -143,6 +144,7 @@ export const Authors = defineDocumentType(() => ({
     bluesky: { type: 'string' },
     linkedin: { type: 'string' },
     github: { type: 'string' },
+    threads: { type: 'string' },
     layout: { type: 'string' },
   },
   computedFields,
