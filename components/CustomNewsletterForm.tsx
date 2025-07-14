@@ -43,6 +43,7 @@ const CustomNewsletterForm = ({
 
     inputEl.current.value = ''
     setError(false)
+    setMessage('📩 확인 메일을 보냈어요! 메일함에서 [확인하기] 버튼을 눌러 구독을 완료해 주세요.')
     setSubscribed(true)
   }
 
@@ -79,8 +80,14 @@ const CustomNewsletterForm = ({
           </button>
         </div>
       </form>
-      {error && (
-        <div className="w-72 pt-2 text-sm text-red-500 sm:w-96 dark:text-red-400">{message}</div>
+      {(error || (subscribed && message)) && (
+        <div
+          className={`w-72 pt-2 text-sm sm:w-96 ${
+            error ? 'text-red-500 dark:text-red-400' : 'text-green-600 dark:text-green-400'
+          }`}
+        >
+          {message}
+        </div>
       )}
     </div>
   )
