@@ -10,6 +10,7 @@ import SectionContainer from '@/components/SectionContainer'
 import siteMetadata from '@/data/siteMetadata'
 import ScrollTopAndComment from '@/components/ScrollTopAndComment'
 import ReadingTime from '@/components/ReadingTime'
+import ProgressBar from '@/components/ProgressBar'
 import { formatDate } from 'pliny/utils/formatDate'
 
 interface LayoutProps {
@@ -26,6 +27,7 @@ export default function PostMinimal({ content, next, prev, children }: LayoutPro
 
   return (
     <SectionContainer>
+      <ProgressBar />
       <ScrollTopAndComment />
       <article>
         <div>

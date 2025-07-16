@@ -9,6 +9,7 @@ import SectionContainer from '@/components/SectionContainer'
 import siteMetadata from '@/data/siteMetadata'
 import ScrollTopAndComment from '@/components/ScrollTopAndComment'
 import ReadingTime from '@/components/ReadingTime'
+import ProgressBar from '@/components/ProgressBar'
 
 interface LayoutProps {
   content: CoreContent<Blog>
@@ -22,6 +23,7 @@ export default function PostLayout({ content, next, prev, children }: LayoutProp
 
   return (
     <SectionContainer>
+      <ProgressBar />
       <ScrollTopAndComment />
       <article>
         <div>
