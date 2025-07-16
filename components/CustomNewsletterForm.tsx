@@ -43,7 +43,7 @@ const CustomNewsletterForm = ({
 
     inputEl.current.value = ''
     setError(false)
-    setMessage('📩 확인 메일을 보냈어요! 메일함에서 [확인하기] 버튼을 눌러 구독을 완료해 주세요.')
+    setMessage('📬 구독 완료! 이제 새로운 글이 발행되면 가장 먼저 알려드릴게요.')
     setSubscribed(true)
   }
 
