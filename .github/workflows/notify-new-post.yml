@@ -1,0 +1,110 @@
+name: New Post Notification
+
+on:
+  push:
+    paths:
+      - 'data/blog/**/*.mdx'  # 블로그 글 파일 변경 감지
+    branches:
+      - main
+
+jobs:
+  notify-new-post:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2  # 이전 커밋과 비교하기 위해
+
+      - name: Check for new blog posts
+        id: check_new_posts
+        run: |
+          # 새로 추가된 블로그 파일들만 찾기 (수정/삭제 제외)
+          NEW_FILES=$(git diff --name-only --diff-filter=A HEAD~1 HEAD | grep "^data/blog/.*\.mdx$" || true)
+          
+          if [ -z "$NEW_FILES" ]; then
+            echo "새로 추가된 블로그 글이 없습니다."
+            echo "has_new_posts=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          
+          echo "새 블로그 글 감지됨:"
+          echo "$NEW_FILES"
+          
+          # 새 글 정보 수집
+          NEW_POSTS_INFO=""
+          for file in $NEW_FILES; do
+            echo "분석 중: $file"
+            
+            # frontmatter에서 draft 상태 확인
+            if grep -q "^draft: true" "$file"; then
+              echo "  → 초안이므로 스킵"
+              continue
+            fi
+            
+            # frontmatter에서 메타데이터 추출
+            TITLE=$(grep "^title:" "$file" | sed 's/^title: *//g' | sed 's/^["'\'']\(.*\)["'\'']$/\1/')
+            DATE=$(grep "^date:" "$file" | sed 's/^date: *//g')
+            SUMMARY=$(grep "^summary:" "$file" | sed 's/^summary: *//g' | sed 's/^["'\'']\(.*\)["'\'']$/\1/' || echo "")
+            
+            # 파일명에서 slug 추출
+            SLUG=$(basename "$file" .mdx)
+            
+            echo "  → 제목: $TITLE"
+            echo "  → 날짜: $DATE"
+            echo "  → 요약: $SUMMARY"
+            echo "  → 슬러그: $SLUG"
+            
+            # JSON 형태로 새 글 정보 구성
+            if [ -z "$NEW_POSTS_INFO" ]; then
+              NEW_POSTS_INFO="[{\"title\":\"$TITLE\",\"slug\":\"$SLUG\",\"date\":\"$DATE\",\"summary\":\"$SUMMARY\"}]"
+            else
+              NEW_POSTS_INFO=$(echo "$NEW_POSTS_INFO" | sed 's/]$/,{"title":"'$TITLE'","slug":"'$SLUG'","date":"'$DATE'","summary":"'$SUMMARY'"}]/')
+            fi
+          done
+          
+          if [ -z "$NEW_POSTS_INFO" ]; then
+            echo "발행 가능한 새 글이 없습니다 (모두 초안)."
+            echo "has_new_posts=false" >> $GITHUB_OUTPUT
+          else
+            echo "has_new_posts=true" >> $GITHUB_OUTPUT
+            echo "new_posts_info<<EOF" >> $GITHUB_OUTPUT
+            echo "$NEW_POSTS_INFO" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Send email notification
+        if: steps.check_new_posts.outputs.has_new_posts == 'true'
+        run: |
+          echo "이메일 알림 발송 중..."
+          
+          # 이메일 발송 API 호출
+          RESPONSE=$(curl -s -w "%{http_code}" -X POST "${{ secrets.DEPLOYMENT_URL || 'https://frogsoo.vercel.app' }}/api/newsletter/notify" \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer ${{ secrets.WEBHOOK_SECRET }}" \
+            -d "{\"posts\": ${{ steps.check_new_posts.outputs.new_posts_info }}}" \
+            -o response_body.txt)
+          
+          HTTP_CODE="${RESPONSE: -3}"
+          RESPONSE_BODY=$(cat response_body.txt)
+          
+          echo "HTTP 응답 코드: $HTTP_CODE"
+          echo "응답 내용: $RESPONSE_BODY"
+          
+          if [ "$HTTP_CODE" -eq 200 ]; then
+            echo "✅ 이메일 알림이 성공적으로 발송되었습니다!"
+          else
+            echo "❌ 이메일 발송 실패 (HTTP $HTTP_CODE)"
+            echo "$RESPONSE_BODY"
+            exit 1
+          fi
+
+      - name: Summary
+        if: always()
+        run: |
+          if [ "${{ steps.check_new_posts.outputs.has_new_posts }}" == "true" ]; then
+            echo "📧 새 블로그 글에 대한 이메일 알림을 발송했습니다."
+          else
+            echo "📝 새로 추가된 발행 가능한 블로그 글이 없습니다."
+          fi
