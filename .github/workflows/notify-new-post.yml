@@ -119,10 +119,10 @@ jobs:
           echo "$PAYLOAD"
           
           # KV에 새 글 정보 저장
-          RESPONSE=$(curl -s -w "%{\http_code}" -X POST "${{ secrets.DEPLOYMENT_URL || 'https://frogsoo.vercel.app' }}/api/kv/store-new-post" 
-            -H "Content-Type: application/json" 
-            -H "Authorization: Bearer ${{ secrets.WEBHOOK_SECRET }}" 
-            -d "$PAYLOAD" 
+          RESPONSE=$(curl -s -w "%{http_code}" -X POST "${{ secrets.DEPLOYMENT_URL || 'https://frogsoo.vercel.app' }}/api/kv/store-new-post" \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer ${{ secrets.WEBHOOK_SECRET }}" \
+            -d "$PAYLOAD" \
             -o response_body.txt)
           
           HTTP_CODE="${RESPONSE: -3}"
