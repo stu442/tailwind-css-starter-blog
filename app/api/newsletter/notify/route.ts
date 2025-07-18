@@ -13,6 +13,7 @@ interface PostData {
 interface NotifyRequest {
   posts: PostData[]
   testEmail?: string // 테스트용 이메일 주소
+  source?: string // 호출 소스 (build-hook 등)
 }
 
 export async function POST(request: NextRequest) {
@@ -26,7 +27,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body: NotifyRequest = await request.json()
-    const { posts, testEmail } = body
+    const { posts, testEmail, source } = body
 
     if (!posts || posts.length === 0) {
       return NextResponse.json({ error: '발송할 글 정보가 없습니다.' }, { status: 400 })
@@ -64,7 +65,7 @@ export async function POST(request: NextRequest) {
 
     // 각 새 글에 대해 이메일 발송
     for (const post of posts) {
-      console.log(`글 "${post.title}"에 대한 이메일 발송 시작...`)
+      console.log(`글 "${post.title}"에 대한 이메일 발송 시작... (소스: ${source || 'unknown'})`)
 
       // 각 구독자에게 개별 이메일 발송
       for (const subscriber of subscribers) {

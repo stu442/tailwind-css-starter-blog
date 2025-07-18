@@ -74,13 +74,13 @@ jobs:
             echo "EOF" >> $GITHUB_OUTPUT
           fi
 
-      - name: Send email notification
+      - name: Store new post info to KV
         if: steps.check_new_posts.outputs.has_new_posts == 'true'
         run: |
-          echo "이메일 알림 발송 중..."
+          echo "새 글 정보를 KV에 저장 중..."
           
-          # 이메일 발송 API 호출
-          RESPONSE=$(curl -s -w "%{http_code}" -X POST "${{ secrets.DEPLOYMENT_URL || 'https://frogsoo.vercel.app' }}/api/newsletter/notify" \
+          # KV에 새 글 정보 저장
+          RESPONSE=$(curl -s -w "%{http_code}" -X POST "${{ secrets.DEPLOYMENT_URL || 'https://frogsoo.vercel.app' }}/api/kv/store-new-post" \
             -H "Content-Type: application/json" \
             -H "Authorization: Bearer ${{ secrets.WEBHOOK_SECRET }}" \
             -d "{\"posts\": ${{ steps.check_new_posts.outputs.new_posts_info }}}" \
@@ -93,9 +93,32 @@ jobs:
           echo "응답 내용: $RESPONSE_BODY"
           
           if [ "$HTTP_CODE" -eq 200 ]; then
-            echo "✅ 이메일 알림이 성공적으로 발송되었습니다!"
+            echo "✅ KV에 새 글 정보가 성공적으로 저장되었습니다!"
           else
-            echo "❌ 이메일 발송 실패 (HTTP $HTTP_CODE)"
+            echo "❌ KV 저장 실패 (HTTP $HTTP_CODE)"
+            echo "$RESPONSE_BODY"
+            exit 1
+          fi
+
+      - name: Trigger Vercel Build Hook
+        if: steps.check_new_posts.outputs.has_new_posts == 'true'
+        run: |
+          echo "Vercel Build Hook 트리거 중..."
+          
+          # Vercel Build Hook 호출
+          RESPONSE=$(curl -s -w "%{http_code}" -X POST "${{ secrets.VERCEL_BUILD_HOOK_URL }}" \
+            -o hook_response.txt)
+          
+          HTTP_CODE="${RESPONSE: -3}"
+          RESPONSE_BODY=$(cat hook_response.txt)
+          
+          echo "HTTP 응답 코드: $HTTP_CODE"
+          echo "응답 내용: $RESPONSE_BODY"
+          
+          if [ "$HTTP_CODE" -eq 200 ] || [ "$HTTP_CODE" -eq 201 ]; then
+            echo "✅ Vercel Build Hook이 성공적으로 트리거되었습니다!"
+          else
+            echo "❌ Build Hook 트리거 실패 (HTTP $HTTP_CODE)"
             echo "$RESPONSE_BODY"
             exit 1
           fi
@@ -104,7 +127,7 @@ jobs:
         if: always()
         run: |
           if [ "${{ steps.check_new_posts.outputs.has_new_posts }}" == "true" ]; then
-            echo "📧 새 블로그 글에 대한 이메일 알림을 발송했습니다."
+            echo "📧 새 블로그 글 정보를 KV에 저장하고 배포를 트리거했습니다."
           else
             echo "📝 새로 추가된 발행 가능한 블로그 글이 없습니다."
           fi
