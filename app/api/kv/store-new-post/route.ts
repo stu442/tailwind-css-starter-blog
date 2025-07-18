@@ -20,8 +20,8 @@ interface KVData {
 
 // Redis 클라이언트 초기화
 const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL!,
-  token: process.env.UPSTASH_REDIS_REST_TOKEN!,
+  url: process.env.KV_REST_API_URL!,
+  token: process.env.KV_REST_API_TOKEN!,
 })
 
 export async function POST(request: NextRequest) {
