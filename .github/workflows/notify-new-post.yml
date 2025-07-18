@@ -20,74 +20,38 @@ jobs:
       - name: Check for new blog posts
         id: check_new_posts
         run: |
-          # 새로 추가된 블로그 파일들만 찾기 (수정/삭제 제외)
-          NEW_FILES=$(git diff --name-only --diff-filter=A HEAD~1 HEAD | grep "^data/blog/.*\.mdx$" || true)
-
-          if [ -z "$NEW_FILES" ]; then
-            echo "새로 추가된 블로그 글이 없습니다."
-            echo "has_new_posts=false" >> $GITHUB_OUTPUT
-            exit 0
-          fi
-
-          echo "새 블로그 글 감지됨:"
-          echo "$NEW_FILES"
-
-          # 새 글 정보 수집 (jq 사용)
-          JSON_OBJECTS=""
-          for file in $NEW_FILES; do
-            echo "분석 중: $file"
-
-            # frontmatter에서 draft 상태 확인
-            if grep -q "^draft: true" "$file"; then
-              echo "  → 초안이므로 스킵"
-              continue
-            fi
-
-            # frontmatter에서 메타데이터 추출 및 정리
-            TITLE=$(grep "^title:" "$file" | sed 's/^title: *//g' | sed 's/^["\'']\(.*\)["\'']$/\1/')
-            DATE=$(grep "^date:" "$file" | sed 's/^date: *//g' | sed 's/^["\'']\(.*\)["\'']$/\1/')
-            SUMMARY=$(grep "^summary:" "$file" | sed 's/^summary: *//g' | sed 's/^["\'']\(.*\)["\'']$/\1/' || echo "")
-            SLUG=$(basename "$file" .mdx)
-
-            echo "  → 제목: $TITLE"
-            echo "  → 날짜: $DATE"
-            echo "  → 요약: $SUMMARY"
-            echo "  → 슬러그: $SLUG"
-
-            # jq를 사용하여 안전하게 JSON 객체 생성
-            JSON_OBJ=$(jq -n \
-              --arg title "$TITLE" \
-              --arg slug "$SLUG" \
-              --arg date "$DATE" \
-              --arg summary "$SUMMARY" \
-              '{title: $title, slug: $slug, date: $date, summary: $summary}')
-            
-            JSON_OBJECTS="$JSON_OBJECTS$JSON_OBJ"
-          done
+          # ... (기존 스크립트 내용)
 
           if [ -z "$JSON_OBJECTS" ]; then
             echo "발행 가능한 새 글이 없습니다 (모두 초안)."
             echo "has_new_posts=false" >> $GITHUB_OUTPUT
           else
-            # 모든 JSON 객체를 하나의 배열로 합침
-            NEW_POSTS_INFO=$(echo "$JSON_OBJECTS" | jq -s '.')
+            # 모든 JSON 객체를 하나의 배열로 합치고 최종 payload로 래핑 (컴팩트 모드)
+            FINAL_PAYLOAD=$(echo "$JSON_OBJECTS" | jq -c -s '{"posts": .}')
             
+            echo "생성된 최종 페이로드:"
+            echo "$FINAL_PAYLOAD"
+
             echo "has_new_posts=true" >> $GITHUB_OUTPUT
-            echo "new_posts_info<<EOF" >> $GITHUB_OUTPUT
-            echo "$NEW_POSTS_INFO" >> $GITHUB_OUTPUT
+            echo "final_payload<<EOF" >> $GITHUB_OUTPUT
+            echo "$FINAL_PAYLOAD" >> $GITHUB_OUTPUT
             echo "EOF" >> $GITHUB_OUTPUT
           fi
 
       - name: Store new post info to KV
         if: steps.check_new_posts.outputs.has_new_posts == 'true'
+        env:
+          PAYLOAD: ${{ steps.check_new_posts.outputs.final_payload }}
         run: |
           echo "새 글 정보를 KV에 저장 중..."
+          echo "전달받은 페이로드:"
+          echo "$PAYLOAD"
           
           # KV에 새 글 정보 저장
-          RESPONSE=$(curl -s -w "%{http_code}" -X POST "${{ secrets.DEPLOYMENT_URL || 'https://frogsoo.vercel.app' }}/api/kv/store-new-post" \
-            -H "Content-Type: application/json" \
-            -H "Authorization: Bearer ${{ secrets.WEBHOOK_SECRET }}" \
-            -d "{\"posts\": ${{ steps.check_new_posts.outputs.new_posts_info }}}" \
+          RESPONSE=$(curl -s -w "%{\http_code}" -X POST "${{ secrets.DEPLOYMENT_URL || 'https://frogsoo.vercel.app' }}/api/kv/store-new-post" 
+            -H "Content-Type: application/json" 
+            -H "Authorization: Bearer ${{ secrets.WEBHOOK_SECRET }}" 
+            -d "$PAYLOAD" 
             -o response_body.txt)
           
           HTTP_CODE="${RESPONSE: -3}"
