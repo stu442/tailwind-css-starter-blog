@@ -26,6 +26,39 @@ function checkEnvVars() {
   }
 }
 
+// Resend API 연결 테스트
+async function testResendConnection() {
+  const resend = new Resend(process.env.RESEND_API_KEY)
+  
+  try {
+    console.log('🔍 Resend API 연결 테스트 중...')
+    
+    // API 키 검증을 위해 도메인 목록 조회 시도
+    const domainsResponse = await resend.domains.list()
+    
+    console.log('✅ Resend API 연결 성공!')
+    console.log('📧 API 키 정보:')
+    console.log('   - API 키 앞 4자리:', process.env.RESEND_API_KEY.substring(0, 8) + '...')
+    
+    if (domainsResponse.data && domainsResponse.data.length > 0) {
+      console.log('🌐 등록된 도메인:')
+      domainsResponse.data.forEach((domain, index) => {
+        console.log(`   ${index + 1}. ${domain.name} (상태: ${domain.status})`)
+      })
+    } else {
+      console.log('⚠️  등록된 도메인이 없습니다.')
+      console.log('   💡 noreply@frogsoo.vercel.app 도메인을 Resend에 등록해야 할 수 있습니다.')
+    }
+    
+    return true
+  } catch (error) {
+    console.error('❌ Resend API 연결 실패:')
+    console.error('   - 오류:', error.message)
+    console.error('   💡 API 키가 올바른지 확인하세요.')
+    return false
+  }
+}
+
 // 블로그 글 목록 가져오기
 async function getAllPosts() {
   try {
@@ -176,7 +209,7 @@ function generateFallbackEmailHtml(post, postUrl, postDate, unsubscribeUrl) {
       
       <p style="color: #666; font-size: 14px; line-height: 24px; margin: 16px 0;">
         안녕하세요! dev_frogsoo입니다.<br>
-        새로운 글을 발행했으니 한번 읽어보시면 좋을 것 같아요.
+        새로운 글을 발행했습니다. 지금 확인해보세요.
       </p>
     </div>
 
@@ -201,22 +234,68 @@ function generateFallbackEmailHtml(post, postUrl, postDate, unsubscribeUrl) {
 async function sendNotificationEmail(post, email, isTest = false) {
   const resend = new Resend(process.env.RESEND_API_KEY)
 
-  // React Email 컴포넌트로 HTML 생성
-  const emailHtml = await generateEmailHtml(post, email)
+  try {
+    // React Email 컴포넌트로 HTML 생성
+    const emailHtml = await generateEmailHtml(post, email)
+    
+    if (isTest) {
+      console.log('🔍 HTML 미리보기 (처음 100자):', emailHtml.substring(0, 100) + '...')
+    }
 
-  // 이메일 발송
-  const response = await resend.emails.send({
-    from: 'dev_frogsoo <noreply@frogsoo.vercel.app>',
-    to: email,
-    subject: `${isTest ? '[테스트] ' : ''}📝 새 글: ${post.title}`,
-    html: emailHtml,
-  })
+    // 이메일 발송 요청 (Resend 기본 도메인 사용)
+    const emailData = {
+      from: 'dev_frogsoo <stu44229@gmail.com>',
+      to: email,
+      subject: `${isTest ? '[테스트] ' : ''}📝 새 글: ${post.title}`,
+      html: emailHtml,
+    }
 
-  if (!response.data) {
-    throw new Error(`이메일 발송 실패: ${response.error?.message || '알 수 없는 오류'}`)
+    if (isTest) {
+      console.log('📧 이메일 발송 요청 데이터:')
+      console.log('   - From:', emailData.from)
+      console.log('   - To:', emailData.to)
+      console.log('   - Subject:', emailData.subject)
+      console.log('   - HTML 길이:', emailData.html.length, '글자')
+    }
+
+    const response = await resend.emails.send(emailData)
+
+    if (isTest) {
+      console.log('📨 Resend API 응답:')
+      console.log('   - 전체 응답:', JSON.stringify(response, null, 2))
+    }
+
+    // 응답 검증
+    if (response.error) {
+      const errorDetails = {
+        message: response.error.message || '알 수 없는 오류',
+        name: response.error.name || 'Unknown',
+        details: response.error
+      }
+      throw new Error(`Resend API 오류: ${errorDetails.message} (${errorDetails.name})`)
+    }
+
+    if (!response.data) {
+      throw new Error(`이메일 발송 실패: 응답 데이터가 없습니다. 전체 응답: ${JSON.stringify(response)}`)
+    }
+
+    if (isTest) {
+      console.log('✅ 이메일 발송 성공! ID:', response.data.id)
+    }
+
+    return response
+  } catch (error) {
+    // 상세한 오류 정보 로깅
+    if (isTest) {
+      console.error('❌ 이메일 발송 중 오류 발생:')
+      console.error('   - 오류 타입:', error.constructor.name)
+      console.error('   - 오류 메시지:', error.message)
+      console.error('   - 전체 오류:', error)
+    }
+    
+    // 에러를 다시 던져서 상위에서 처리할 수 있게 함
+    throw new Error(`이메일 발송 실패: ${error.message}`)
   }
-
-  return response
 }
 
 // 글 목록 출력
@@ -355,6 +434,7 @@ async function main() {
   yarn newsletter:help                      # 도움말 보기
   yarn newsletter:send <글> --test <이메일>   # 테스트 발송
   yarn newsletter:send <글> --preview       # 이메일 미리보기
+  yarn newsletter:send --verify             # Resend API 연결 테스트
   yarn newsletter:dev                       # React Email 개발 서버
 
 예시:
@@ -364,6 +444,7 @@ async function main() {
   yarn newsletter:subscribers               # 구독자 목록
   yarn newsletter:send cute-go --test test@example.com  # 테스트 발송
   yarn newsletter:send cute-go --preview    # 이메일 미리보기
+  yarn newsletter:send --verify             # API 연결 및 도메인 확인
   yarn newsletter:dev                       # React Email 개발 서버 실행
 
 환경변수:
@@ -386,6 +467,19 @@ async function main() {
     console.log('👥 구독자 목록 조회 중...')
     const subscribers = await getSubscribers()
     listSubscribers(subscribers)
+    return
+  }
+
+  // Resend API 연결 테스트
+  if (args.includes('--verify')) {
+    checkEnvVars()
+    const isConnected = await testResendConnection()
+    if (isConnected) {
+      console.log('\n✅ Resend API 설정이 올바릅니다!')
+    } else {
+      console.log('\n❌ Resend API 설정에 문제가 있습니다.')
+      process.exit(1)
+    }
     return
   }
 

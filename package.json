@@ -15,6 +15,7 @@
     "newsletter:subscribers": "tsx ./scripts/send-newsletter.mjs --subscribers",
     "newsletter:help": "tsx ./scripts/send-newsletter.mjs --help",
     "newsletter:preview": "tsx ./scripts/send-newsletter.mjs",
+    "newsletter:verify": "tsx ./scripts/send-newsletter.mjs --verify",
     "newsletter:dev": "email dev"
   },
   "dependencies": {
