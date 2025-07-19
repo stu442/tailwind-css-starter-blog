@@ -13,21 +13,20 @@ interface PostData {
 interface NotifyRequest {
   posts: PostData[]
   testEmail?: string // 테스트용 이메일 주소
-  source?: string // 호출 소스 (build-hook 등)
 }
 
 export async function POST(request: NextRequest) {
   try {
-    // GitHub Actions에서의 인증 확인
-    const authHeader = request.headers.get('authorization')
-    const expectedToken = process.env.WEBHOOK_SECRET
-
-    if (expectedToken && authHeader !== `Bearer ${expectedToken}`) {
-      return NextResponse.json({ error: '인증되지 않은 요청입니다.' }, { status: 401 })
-    }
-
     const body: NotifyRequest = await request.json()
-    const { posts, testEmail, source } = body
+    const { posts, testEmail } = body
+
+    // 관리자 인증 확인
+    const adminAuthHeader = request.headers.get('x-admin-token')
+    const expectedAdminToken = process.env.ADMIN_SECRET || 'admin123'
+
+    if (adminAuthHeader !== expectedAdminToken) {
+      return NextResponse.json({ error: '관리자 인증이 필요합니다.' }, { status: 401 })
+    }
 
     if (!posts || posts.length === 0) {
       return NextResponse.json({ error: '발송할 글 정보가 없습니다.' }, { status: 400 })
@@ -65,7 +64,7 @@ export async function POST(request: NextRequest) {
 
     // 각 새 글에 대해 이메일 발송
     for (const post of posts) {
-      console.log(`글 "${post.title}"에 대한 이메일 발송 시작... (소스: ${source || 'unknown'})`)
+      console.log(`글 "${post.title}"에 대한 이메일 발송 시작...`)
 
       // 각 구독자에게 개별 이메일 발송
       for (const subscriber of subscribers) {

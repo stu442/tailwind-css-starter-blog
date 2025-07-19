@@ -46,5 +46,9 @@ yarn-error.log*
 # Contentlayer
 .contentlayer
 
+# Newsletter preview files
+.temp/
+preview-email.html
+
 .env
 .env.example
