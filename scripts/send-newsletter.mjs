@@ -29,17 +29,17 @@ function checkEnvVars() {
 // Resend API 연결 테스트
 async function testResendConnection() {
   const resend = new Resend(process.env.RESEND_API_KEY)
-  
+
   try {
     console.log('🔍 Resend API 연결 테스트 중...')
-    
+
     // API 키 검증을 위해 도메인 목록 조회 시도
     const domainsResponse = await resend.domains.list()
-    
+
     console.log('✅ Resend API 연결 성공!')
     console.log('📧 API 키 정보:')
     console.log('   - API 키 앞 4자리:', process.env.RESEND_API_KEY.substring(0, 8) + '...')
-    
+
     if (domainsResponse.data && domainsResponse.data.length > 0) {
       console.log('🌐 등록된 도메인:')
       domainsResponse.data.forEach((domain, index) => {
@@ -49,7 +49,7 @@ async function testResendConnection() {
       console.log('⚠️  등록된 도메인이 없습니다.')
       console.log('   💡 noreply@frogsoo.vercel.app 도메인을 Resend에 등록해야 할 수 있습니다.')
     }
-    
+
     return true
   } catch (error) {
     console.error('❌ Resend API 연결 실패:')
@@ -237,7 +237,7 @@ async function sendNotificationEmail(post, email, isTest = false) {
   try {
     // React Email 컴포넌트로 HTML 생성
     const emailHtml = await generateEmailHtml(post, email)
-    
+
     if (isTest) {
       console.log('🔍 HTML 미리보기 (처음 100자):', emailHtml.substring(0, 100) + '...')
     }
@@ -270,13 +270,15 @@ async function sendNotificationEmail(post, email, isTest = false) {
       const errorDetails = {
         message: response.error.message || '알 수 없는 오류',
         name: response.error.name || 'Unknown',
-        details: response.error
+        details: response.error,
       }
       throw new Error(`Resend API 오류: ${errorDetails.message} (${errorDetails.name})`)
     }
 
     if (!response.data) {
-      throw new Error(`이메일 발송 실패: 응답 데이터가 없습니다. 전체 응답: ${JSON.stringify(response)}`)
+      throw new Error(
+        `이메일 발송 실패: 응답 데이터가 없습니다. 전체 응답: ${JSON.stringify(response)}`
+      )
     }
 
     if (isTest) {
@@ -292,7 +294,7 @@ async function sendNotificationEmail(post, email, isTest = false) {
       console.error('   - 오류 메시지:', error.message)
       console.error('   - 전체 오류:', error)
     }
-    
+
     // 에러를 다시 던져서 상위에서 처리할 수 있게 함
     throw new Error(`이메일 발송 실패: ${error.message}`)
   }
@@ -323,8 +325,8 @@ function listSubscribers(subscribers) {
   console.log('👥 구독자 목록:')
   console.log(''.padEnd(60, '─'))
   const activeCount = subscribers.filter((s) => !s.unsubscribed).length
-  console.log(`📊 총 구독자 수: ${subscribers.length}명 (활성: ${activeCount}명)
-`)
+  console.log(`📊 총 구독자 수: ${subscribers.length}명 (활성: ${activeCount}명)`)
+  console.log('')
 
   if (subscribers.length === 0) {
     console.log('구독자가 없습니다.')
@@ -551,11 +553,15 @@ async function main() {
   const activeSubscribers = allSubscribers.filter((s) => !s.unsubscribed)
 
   if (activeSubscribers.length === 0) {
-    console.log(`⚠️  활성 구독자가 없어서 이메일을 발송하지 않습니다. (총 ${allSubscribers.length}명 중)`)
+    console.log(
+      `⚠️  활성 구독자가 없어서 이메일을 발송하지 않습니다. (총 ${allSubscribers.length}명 중)`
+    )
     return
   }
 
-  console.log(`📊 총 구독자 수: ${allSubscribers.length}명 (실제 발송 대상: ${activeSubscribers.length}명)`)
+  console.log(
+    `📊 총 구독자 수: ${allSubscribers.length}명 (실제 발송 대상: ${activeSubscribers.length}명)`
+  )
 
   // 확인 요청
   console.log('\n⚠️  실제로 모든 구독자에게 뉴스레터를 발송하시겠습니까?')
@@ -592,7 +598,9 @@ async function main() {
       errorCount++
       const errorMessage = `${subscriber.email}: ${error.message}`
       errors.push(errorMessage)
-      process.stdout.write(`❌ 실패: ${errorCount}, 성공: ${successCount}/${activeSubscribers.length}\r`)
+      process.stdout.write(
+        `❌ 실패: ${errorCount}, 성공: ${successCount}/${activeSubscribers.length}\r`
+      )
     }
   }
 
