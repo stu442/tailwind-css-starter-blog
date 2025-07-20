@@ -18,7 +18,7 @@ const siteMetadata = {
   // twitter: 'https://twitter.com/Twitter',
   // facebook: 'https://facebook.com', // not used
   // youtube: 'https://youtube.com', // not used
-  linkedin: 'www.linkedin.com/in/민수-박-3b981029a',
+  linkedin: 'https://www.linkedin.com/in/민수-박-3b981029a',
   threads: 'https://www.threads.com/@dev_frogsoo',
   // instagram: 'https://www.instagram.com', // not used
   // medium: 'https://medium.com', // not used
