@@ -1,0 +1,38 @@
+---
+title: '글 쓰는 개발자에게 추천하는 도구'
+date: '2025-07-27'
+lastmod: '2025-07-27'
+tags: ['productivity', 'tool']
+draft: false
+summary: '글 쓰는 개발자에게 추천하는 CLI 맞춤법 검사기'
+layout: PostSimple
+---
+
+저는 거의 매일 글을 쓰는 편입니다.
+
+그것도 남에게 보여주는 글을 쓰기 때문에,
+'맞춤법 검사'는 필수죠.
+
+매일 맞춤법 검사하러
+브라우저 열고, 찾아서 들어가는 과정이
+너무 귀찮았는데,
+
+마침 딱 좋은 도구를 찾았어요.
+
+## hanspell
+
+[hanspell](https://github.com/9beach/hanspell)은 (주)다음과 부산대학교 인공지능연구실/(주)나라인포테크의
+웹 서비스를 이용한 한글 맞춤법 검사기입니다.
+
+CLI 에서 실행시킬 수 있다는 점이 큰 장점인데요.
+
+저는 alias를 설정해놓고 사용 중입니다.
+
+```shell
+$ alias spell-check="pbpaste | hanspell-cli"
+```
+
+> pbpaste | hanspell-cli -> 맥 환경에서 클립보드에 복사된 문장을 교정합니다.
+
+이제 cmd + c 로 복사해놓고,
+터미널 열고, "spell-check" 이라는 명령어를 치면 문장을 교정해줍니다.
