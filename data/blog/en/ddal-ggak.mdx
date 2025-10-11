@@ -1,0 +1,90 @@
+---
+title: "Ah, Checking for Rental Housing is Annoying, I'll Just Make a Server"
+date: '2025-09-07'
+lastmod: '2025-09-07'
+tags: ['automation', 'go', 'productivity']
+draft: false
+summary: 'The one-hour grand journey that started with... "Ugh... its so annoying to check for youth rental housing announcements."'
+layout: PostSimple
+---
+
+![](/static/images/ddal-ggak/2.png)
+
+The reason I first started studying development was because I wanted to automate the consignment sales process I was doing as a side job for pocket money in college.
+I didn't want to do simple repetitive tasks every day.
+
+> ‘I make the tools I need in the form that is best for me to use.’
+
+That thought still holds true.
+
+## It's tough for a recent graduate....
+
+As a recent graduate, living with monthly expenses of 600,000 won is a very difficult situation.
+
+For people like you, the country has various measures for 'youth'.
+
+First, there is the 'Youth Monthly Rent Support' that most young people will know about.
+It's a policy that supports up to 200,000 won per month for one year, once in a lifetime.
+
+I have applied for it this time. Hoho...
+
+And there is also a system called 'Youth Public Rental Housing' that many people surprisingly don't know about.
+
+Simply put, you can think of it as a system where the state provides low-cost rental housing to solve housing costs cheaply.
+
+## However...
+
+However, there is a problem.
+
+First of all, the competition is no joke.
+
+As many young people in Korea work in Seoul, many people are looking for stable housing in Seoul.
+
+But there's nothing we can do about that.
+
+The biggest problem is that 'applying' is difficult.
+Every week, you have to go to the website to check if a new announcement has been posted.
+
+This was so annoying.
+
+## "Check" it for me
+
+So I thought it would be good to automate this too.
+
+Using Github Actions, it checks if a new post has been written on the desired web page every day, and if so, it notifies me via Telegram.
+
+## Technology Selection
+
+I started by thinking about the language.
+I suddenly remembered that I had used Go for crawling in the past.
+
+I found Go to be quite fun, so I chose Go to study as well.
+
+However, since I was planning to do most of the work using Claude Code, it didn't really matter...
+
+I wanted to use Github Action's Cron Job to send a notification to my phone via the Telegram Bot API every day at 9 am.
+
+## Claude's Sword Dance
+
+Since I had a rough plan, I just gave Claude a rough order.
+
+Then it started working on its own, and in about 30 minutes, it had created all the code.
+
+Although there were many things I had to do outside of the code, like setting up Github Actions and the Telegram bot, thanks to Claude Code's perfect code, I was able to complete the system I aimed for in just one hour.
+
+![](/static/images/ddal-ggak/1.png)
+
+## The Easiest Era to Make Your Own Tools
+
+Now, making the tools you need and that are right for you has become a piece of cake...
+
+The old me who struggled to automate the consignment sales process became a developer like this, but now, to make a tool, you can just give a command with a 'prompt' without much thought.
+
+It's a really convenient world, but I think there are definitely many things that have been lost.
+
+The opportunity for deep and solid growth that could be obtained by directly confronting and struggling with problems.
+
+As a developer, I have many thoughts.
+
+I'll go study some more.
+Thank you for reading.

@@ -1,0 +1,210 @@
+---
+title: "Go Isn't Just Cute by Its Mascot"
+date: '2025-06-18'
+lastmod: '2025-06-18'
+tags: ['go', 'programming', 'language']
+draft: false
+summary: 'The limits of my language mean the limits of my world.'
+layout: PostSimple
+---
+
+## 🏁 Starting Today's Post with a Grand Statement
+
+> The limits of my language mean the limits of my world.
+>
+> - Ludwig Wittgenstein
+
+This is one of the sentences from the renowned British philosopher, Wittgenstein.
+
+I believe that learning a new language goes beyond simply memorizing combinations of words;
+it's about learning the culture, thought structures, and even the worldview from which that language was born.
+
+Ultimately, I think learning a language is about expanding my own worldview.
+
+So, what does this have to do with programming languages?
+
+I think programming "languages" are
+quite similar.
+
+## 📘 The Pragmatic Programmer
+
+![](/static/images/cute-go/Pasted_image_20250610072824.png)
+
+This is the book, The Pragmatic Programmer.
+
+This book also mentions the usefulness of encountering various languages.
+
+> Different languages solve the same problems in different ways.
+> Knowing several different approaches helps expand your thinking and helps you avoid getting stuck in a rut.
+>
+> - The Pragmatic Programmer, p22
+
+I think programming languages and foreign languages are very similar.
+
+English and Korean express the same thoughts with different words.
+The word order and grammar are also completely different.
+
+It's "solving the same problem differently."
+
+Recently, I became interested in a language called Go.
+I studied it briefly for about two weeks.
+
+While making a simple CLI Todo list and a crawler, I'd like to introduce
+the features and advantages of the Go language that I felt, and the usefulness of learning a new language.
+
+## ⚙️ Features of Golang
+
+Go is a concise and fast language.
+It's practical, clear, and simple.
+
+### 🍲 A Simple and Explicit Taste, Like Chicken Soup
+
+```go
+func main() {
+  foo := "Hello world"
+  fmt.Println(foo)
+}
+```
+
+This is the code to display "Hello world" in the console.
+
+If you have ever learned a programming language, you can learn it very quickly.
+Variable declarations, functions, if, for, and switch statements are all concise.
+
+### 🚀 Pragmatism
+
+Go is a compiled language.
+However, its compilation speed is very fast.
+
+Moreover, since it compiles into a single executable file
+including all dependencies,
+deployment is also convenient.
+
+I think it's a very 'developer-friendly' language.
+
+### 🧵 Concurrency
+
+Go is a language designed to make parallel programming easy.
+You can handle asynchronous logic easily.
+
+```go
+package main
+
+import (
+	"fmt",
+	"time"
+)
+
+// A function that does something (e.g., API call, file processing, etc.)
+func doSomething(name string, done chan string) {
+	time.Sleep(2 * time.Second)
+	done <- fmt.Sprintf("%s task complete!", name)
+}
+
+func main() {
+	done := make(chan string)
+
+	go doSomething("A", done) // Run as a goroutine
+	go doSomething("B", done) // Run another goroutine
+
+	// Receive results
+	fmt.Println(<-done)
+	fmt.Println(<-done)
+}
+```
+
+You call the function with the `go` keyword.
+
+And by creating a channel for goroutines to send and receive results,
+you can create simple and clear concurrent code.
+
+## 🧠 The Impact of Go on My Way of Thinking
+
+### 📌 Clarification of the Pointer Concept
+
+Before learning Go, I didn't really understand the concept of pointers.
+I just had a vague idea that 'oh, such a concept exists.'
+
+In JavaScript, I had learned variable referencing and copying through experience,
+but the underlying mechanism felt blurry.
+
+However, in Go, the concept of 'pointers' appears explicitly.
+At first, I thought it was complex and difficult,
+but the more I learned, the more I thought, 'ah, this is why pointers exist.'
+
+Thanks to this, I was able to solidify my understanding of pointers,
+and in languages like JavaScript, I came to understand referencing and copying at a lower level.
+
+### 🧯 Don't Hide Errors, Face Them.
+
+What impressed me about Go was its error handling method.
+Most languages have `try-catch`.
+
+It's a way of handling errors in a block.
+
+Actually, I didn't like this method that much.
+If you use `try-catch` over too wide a scope,
+it's hard to know exactly where the error occurred.
+
+Go makes errors explicit by returning them as values.
+
+```go
+package main
+
+import (
+	"errors",
+	"fmt"
+)
+
+// greet function that returns a string and an error
+func greet(name string) (string, error) {
+	if name == "" {
+		return "", errors.New("name is missing")
+	}
+	return "Hello, " + name, nil
+}
+
+func main() {
+	msg, err := greet("")
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+	fmt.Println(msg)
+}
+```
+
+It might be cumbersome at first,
+but you'll realize how clear and safe this method is.
+
+I gained the confidence that I could control errors.
+
+Not hiding errors, but revealing them clearly.
+This has become my own philosophy, valid not only in programming but also in my life.
+
+### 🎮 Fun Coding
+
+The biggest treasure I gained from learning and practicing Go
+was 'joy.'
+
+Looking at code every day under the pressure of deadlines and responsibilities,
+I had started to avoid code at home.
+
+But as I studied Go without any pressure, just for fun,
+I was able to feel the joy of coding that I had forgotten.
+
+Now, even after coming home from work, I find myself looking at open-source projects,
+or looking for ways I can contribute...
+
+I once again felt pure joy.
+
+## 🎯 Conclusion
+
+Go was a great opportunity to learn not only a new technology and language but also a new way of thinking.
+There was the simple and clear language and way of thinking, and the joy I found in it.
+
+![](/static/images/cute-go/Pasted_image_20250610083919.png)
+
+Besides, isn't the Go mascot really cute?
+
+So, why don't we study it together? 🐹🐹

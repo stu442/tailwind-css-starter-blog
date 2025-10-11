@@ -1,0 +1,108 @@
+---
+title: 'Carry Your Computer in Your Phone'
+date: '2025-07-19'
+lastmod: '2025-07-19'
+tags: ['productivity']
+draft: false
+summary: 'My life changed after I learned about SSH.'
+layout: PostSimple
+---
+
+![](/static/images/home-ssh/1.png)
+
+## Overview
+
+Thanks to AI, you can develop lightly anytime, anywhere.
+Just type a prompt and it will create a prototype for you.
+
+So I thought about it.
+If it's an environment where you can really just type a prompt anywhere,
+wouldn't it be possible to develop somehow?
+
+So I tried using SSH to remotely access my computer from my phone.
+
+## Port Forwarding
+
+The first thing that came to mind was port forwarding.
+
+It's a way to open a specific port on my network to the outside.
+
+However, this method is also critical for security,
+and it took too much effort to worry about these things.
+
+## The Fastest Way, Tailscale
+
+![](/static/images/home-ssh/2.png)
+
+Tailscale is a modern VPN solution that allows you to easily and securely connect multiple devices without complex settings.
+
+If you install this program and turn on the VPN,
+you can connect to each other via VPN.
+
+This method was the most suitable for me.
+
+I could apply it quickly and didn't have to worry much about security.
+Plus, you can use it sufficiently with the **free plan**.
+
+## Connecting via SSH
+
+### Installing Tailscale
+
+Now the method is very easy.
+
+Install Tailscale on the device you want to connect to,
+and turn on the VPN.
+
+In my case, it was a Mac mini, iPhone, iPad, and MacBook.
+
+I set it up so that I can access my Mac mini anytime with my iPhone, iPad, and MacBook.
+
+### Mac mini Settings
+
+![](/static/images/home-ssh/3.png)
+
+Select System Settings > General > Sharing menu.
+
+![](/static/images/home-ssh/4.png)
+
+Activate "Remote Login" and you're all set.
+
+### Connecting with iPhone, iPad
+
+There are several ways to connect via SSH with an iPhone or iPad.
+
+There is a way to connect with a terminal,
+and a way to connect with an editor.
+
+For the terminal, I used an app called Termius,
+and for the editor, I used a paid app called Code.
+
+Both apps are intuitive to use,
+so I will omit detailed explanations in this article and talk about them lightly.
+
+It will ask for a user name and IP address for SSH connection.
+
+For the user name, enter the user name of the Mac mini,
+and for the IP address, enter the IP address of the Mac mini written in Tailscale and connect.
+
+## Utilization with AI
+
+After setting it up and connecting like this,
+I was really able to remotely access my computer from outside!!
+
+I could check server logs on my iPhone on my way to work,
+or make simple code modifications on my iPad,
+and do various other things.
+
+However, what I wanted to do most was development.
+The romance of being able to develop with AI from anywhere.
+
+I can't use Cursor,
+but Gemini CLI and Claude Code work in a CLI environment.
+
+They are very suitable for use in an SSH environment.
+
+Is it really possible to code with AI on your phone on your way to and from work?
+I plan to test it myself.
+
+I'll share that experience in the next post!!

@@ -1,0 +1,178 @@
+---
+title: 'An App Made in Two Days, Can It Survive?'
+date: '2025-05-31'
+lastmod: '2025-05-31'
+tags: ['ai', 'programming', 'product']
+draft: false
+summary: 'With AI, from planning to marketing'
+layout: PostSimple
+---
+
+## I want to do an experiment. 🧪
+
+Tools that explosively increase development productivity, such as Vibe Coding, AI, and MCP, are pouring out every day.
+
+However, for me, working in a closed network environment, the opportunity to try these tools myself was rare.
+
+On the other hand, I had a desire to experiment by creating 'my own product'.
+
+Although I have experience with a toy project that actually acquired users,
+
+"How many users can an app made quickly and lightly with AI gather?"
+I wanted to test that possibility.
+
+So, for 30 days, I'm starting an experiment where I do everything from planning to development and marketing myself.
+By the end of June, through this journey, I intend to cultivate a sense for products.
+
+## A Space in Daegu 🪟
+
+![](/static/images/two-app/1.png)
+
+The beginning was a certain space in Daegu.
+It's a space where you can quietly do various things while enjoying contemplation.
+
+There are many books, you can draw, drink tea, or just sit quietly and feel the atmosphere.
+
+What was most impressive here was the 'guestbook'.
+
+To be precise, it was a concept closer to a 'shared note'.
+
+Everyone who visited this space wrote their thoughts, feelings, emotions, and daily diaries in this note.
+
+At that time, I was exhausted from being overwhelmed with many things.
+That space and the 'shared note' were a great comfort to me.
+
+I was comforted by reading other people's stories, and writing my own story in a note that someone else might see was also a great comfort.
+
+It was a healing moment.
+
+I thought it would be great if people who are struggling now could have this experience.
+So I decided I had to make this service.
+
+## Dancing with GPT
+
+At first, I just thought, 'I should try to implement a `shared note` on the web!'
+
+But I wanted to be thorough with the planning.
+Having done many toy projects on my own, I realized the importance of a solid plan...
+
+So I started planning with GPT.
+
+I talked with GPT about the features I was thinking of, and we discussed what other features might be needed and which ones to remove.
+
+And when I asked it to organize everything, a decent plan came out!
+
+![](/static/images/two-app/2.png)
+
+With these plans, I started working on the design, wireframe, and data structure with GPT again, and I organized a lot of documents.
+
+![](/static/images/two-app/3.png)
+
+Very reassuring..
+
+From planning, data structure, API design, design, prompts, personas, wireframes...
+
+Everything needed for the service, from planning to design, feature design, and development, was designed in just one day...!!
+
+It's a truly wonderful world.
+
+## Design? AI did it for me. 🎨
+
+However, what GPT generated was just text, and I had to do the implementation.
+
+I wanted to quickly launch a service with minimal features.
+If I were to do the design and development that fit the plan on my own, it would take at least a week.
+
+But, it's different with AI.
+You can quickly produce a product of a certain guaranteed quality.
+
+Friends who can create code just by looking at design and planning text already exist.
+
+The services I know of are Lovable, bolt.new, and v0.
+I decided to try making something rough with all three for free.
+
+### Lovable
+
+![](/static/images/two-app/4.png)
+
+### bolt.new
+
+![](/static/images/two-app/5.png)
+
+### v0
+
+![](/static/images/two-app/6.png)
+
+I used the same prompt for all of them.
+So similar designs came out.
+
+Among them, I liked the design of bolt.new.
+It used framer motion to implement small animations.
+
+I finished the simple design and implementation with AI.
+However, I had to do the detailed implementation myself, such as linking with the backend and the GPT scheduler.
+
+But do I really have to do it myself?
+I entrusted the major tasks to AI with MCP and Cursor.
+
+About 80% of the detailed implementation work was not done by me.
+I had AI do it all.
+
+When I combined MCP and Cursor, it implemented the requirements quite accurately.
+
+## Implementation... AI did it for me too. 🛠️
+
+### The PM that became, MCP: Task-Master 📋
+
+Among them, the most impressive MCP server is Task-Master.
+I have already written a [post](https://velog.io/@stu442/PM-%EC%97%86%EC%9D%B4-%ED%98%BC%EC%9E%90-%EA%B0%9C%EB%B0%9C%ED%95%9C%EB%8B%A4%EA%B3%A0%EC%9A%94-%EC%A0%80%EB%8A%94-AI-PM-%EC%94%81%EB%8B%88%EB%8B%A4) about it, so I will only introduce it briefly.
+
+Task-Master takes a PRD (Product Requirements Document) and organizes the major tasks, detailed tasks, and implementation details based on the PRD.
+
+And when you work on a task using Task-Master in Cursor, the AI writes code based on the already created `to-do list` and `plan`.
+
+Since all the context is already written, you can get a pretty good implementation just by "clicking" "~ implement this" without a detailed explanation.
+
+And it adds and modifies tasks on its own.
+
+### Lightweight Backend, Supabase 🧱
+
+I used Supabase for the backend.
+
+I chose Supabase because I was familiar with it and wanted to try using an MCP Server.
+
+Moreover, the DX (Developer Experience) is also quite good.
+
+I thought this stack was the most appropriate for quickly experimenting with a product.
+
+Based on the API definition and data structure I had already created, I created a DB and conducted tests.
+
+## A Small Healing Space Made in Two Days ✨
+
+Many intermediate steps were omitted, but in any case, a product with minimal functionality was born.
+
+It took about 2 days.
+
+It was 2 days where I felt that you can quickly get a decent experimental product for a simple CRUD web app using AI.
+
+From now on, for about 30 days, I plan to post content on SNS and try to induce people's participation.
+
+I plan to record this process on my blog as well, and the web page has Vercel's Analytics function.
+
+I can check visitor and referrer information.
+
+![](/static/images/two-app/7.png)
+
+For now, it's a space that only I visit...
+
+If you have any good promotion methods, please share... them.
+
+👉 [Note-itda, Connect your heart to a note once a day](https://connecting-note.vercel.app/)
+
+If you are interested, you might want to try it out.
+
+Personally, I wanted to experiment with how many users an app made quickly with a light idea could gather.
+
+At the same time, it is my own small challenge to cultivate a sense for products.
+
+I would be grateful if you would watch this journey that will continue for the next month. 🙏

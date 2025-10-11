@@ -1,0 +1,38 @@
+---
+title: '文章を書く開発者におすすめのツール'
+date: '2025-07-27'
+lastmod: '2025-07-27'
+tags: ['productivity', 'tool']
+draft: false
+summary: '文章を書く開発者におすすめのCLIスペルチェッカー'
+layout: PostSimple
+---
+
+私はほとんど毎日文章を書いています。
+
+それも人に見せるための文章なので、
+「スペルチェック」は必須です。
+
+毎日スペルチェックのために
+ブラウザを開いて、探して入る過程が
+とても面倒でした。
+
+そんな時、ちょうど良いツールを見つけました。
+
+## hanspell
+
+[hanspell](https://github.com/9beach/hanspell)は、(株)Daumと釜山大学人工知能研究室/(株)ナラインフォテックの
+ウェブサービスを利用した韓国語スペルチェッカーです。
+
+CLIで実行できるという点が大きな利点です。
+
+私はaliasを設定して使っています。
+
+```shell
+$ alias spell-check="pbpaste | hanspell-cli"
+```
+
+> pbpaste | hanspell-cli -> Mac環境でクリップボードにコピーされた文章を校正します。
+
+これで、cmd + cでコピーしておき、
+ターミナルを開いて、「spell-check」というコマンドを打つと文章を校正してくれます。

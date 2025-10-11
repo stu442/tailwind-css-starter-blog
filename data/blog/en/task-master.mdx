@@ -1,0 +1,200 @@
+---
+title: 'No PM and developing alone? I use an AI PM.'
+date: '2025-05-25'
+lastmod: '2025-05-25'
+tags: ['ai', 'programming', 'product']
+draft: false
+summary: 'A tool to increase development productivity, AI PM Task-Master'
+layout: PostSimple
+---
+
+## 🧠 What is Task-Master?
+
+> A **task management system** for AI-driven development with Claude, designed to work seamlessly with **Cursor AI**.
+>
+> [Task-Master Official Repository Description](https://github.com/eyaltoledano/claude-task-master?tab=readme-ov-file#task-master-)
+
+Simply put, it's a tool that manages a project's TO-DOs.
+The AI becomes the project's PM (Product Manager)!
+
+And there might be a misunderstanding because it says "with Claude" above.
+
+You can use other AIs.
+You can even run it with a local AI using ollama...!
+
+### ❓ Why should I use this?
+
+Does a personal project really need a 'project task management system'?
+**No, it doesn't.**
+
+But, this guy doesn't just 'manage tasks'.
+Its true potential comes out when used with 'Cursor'.
+
+## 🛠️ How to Use
+
+For basic usage, it would be faster to refer to the [official github](https://github.com/eyaltoledano/claude-task-master).
+
+There is a way to use it with MCP and a way to use it with CLI.
+
+Officially, using it with MCP is recommended,
+but personally, I prefer the CLI.
+
+It's light and you can command it quickly,
+and most of all, **it looks cool.**
+
+![](/static/images/task-master/1.png)
+
+Try displaying it like this in your terminal...
+It really gets you pumped up.
+
+## 🔍 Real-World Review: After Using It All Day
+
+### ⚙️ Setup
+
+After trying it, the setup was the most difficult part, and the rest was simple.
+
+There are two main things to set up.
+
+1.  Set up AI API key
+    1.  I used the GPT-4o model.
+2.  Write a PRD
+    1.  GPT wrote it for me.
+
+Once you set it up like this, Task-Master will create a to-do list based on the written PRD.
+
+### 📋 Task Organization
+
+As you can see in the picture above, it checks not only the to-do list but also the priority, complexity, etc.
+
+And that's not all.
+
+![](/static/images/task-master/2.png)
+
+If you look closely at task 3, it organizes implementation details, test strategies, sub-tasks, etc.
+
+But if it only organizes tasks in a fancy way,
+there's no reason to use it.
+
+We can do that better ourselves.
+
+### 🤝 Combination with Cursor
+
+The synergy is amazing when used with Cursor.
+
+Once you organize your to-do list with Task-Master,
+a folder called /tasks is created in the directory.
+
+![](/static/images/task-master/3.png)
+
+It contains the to-do list, its description, and detailed implementation considerations.
+
+![](/static/images/task-master/4.png)
+
+If you put this into **Cursor** and work on it, the code context understanding improves noticeably and the quality of suggestions also improves.
+
+### 💸 Cost
+
+I used it for about half a day yesterday.
+The API cost was $0.11 (150 won).
+
+I don't know what you'll think,
+but from my experience, it seems like a reasonable price.
+
+It manages my to-do list,
+and it also upgrades Cursor's efficiency.
+
+### 🧩 Pro Tip
+
+Personally, I found it annoying to type task-master every time I entered a command.
+
+```bash
+task-master set-status ~~
+```
+
+So I made it shorter by creating an alias.
+
+```bash
+tm set-status ~~
+```
+
+A micro-tip.
+
+## ⚖️ Pros and Cons Summary
+
+### ✅ Pros
+
+- Automated task distribution
+  - Just input the PRD and it automatically organizes priority, complexity, and sub-tasks
+  - Fast and efficient task distribution possible
+- Synergy with Cursor
+  - Putting the generated tasks into Cursor greatly improves code context understanding
+  - Improves both code quality and work speed
+- Convenient CLI usage
+  - If you are familiar with the CLI environment, you can command it lightly and quickly
+  - Repetitive use can also be simplified with alias settings
+- Reasonable cost
+  - Based on GPT-4o, about $0.1 (150 won) for half a day of use
+  - Very cheap for its functionality
+
+### ✅ Cons
+
+- Entry barrier of initial setup
+  - Initial setup such as API key registration and PRD preparation can feel somewhat difficult if you are not familiar with it
+- Burden of writing a PRD
+  - If you have to write the PRD yourself, it can take time and money
+  - I also generated the PRD with GPT, but it doesn't mean that planning skills are not necessary
+- Performance varies depending on input quality
+  - The generated tasks depend heavily on the quality of the PRD
+  - In other words, the basic limitation of AI tools, "good input → good output", exists
+
+## ✨ Surviving in a World Where New Things Keep Coming Out
+
+These days, new things appear in the IT world every day.
+AI, Cursor, MCP... it's so fast that it's hard to keep up.
+
+From the perspective of working in a collaborative environment,
+it's not easy to introduce and experiment with all of these things in real time.
+
+Because there is not enough time.
+
+In the end, I tend to try one or two new tools every time I do a toy project.
+
+This time, I tried two tools, MCP and Task-Master.
+I think they are useful tools, although not as big of a deal as I thought.
+
+I don't think it's necessary to follow all of these things,
+and I think it's fine to learn them when you need them.
+
+My digression has been long.
+
+Let me summarize briefly.
+
+## 👀 In Conclusion
+
+To be honest, I'm still not sure about MCP.
+I also tried using Task-Master in the MCP way, but
+
+I found it faster and more intuitive to command it directly with the CLI
+than to set up MCP, command it with natural language, and wait for the results.
+
+I also handled the supabase MCP directly for a similar reason.
+
+But Task-Master was a good find.
+Considering the combination with Cursor and the cost-effectiveness,
+it was a really reasonable tool.
+
+I plan to finish this project with Task-Master.
+
+I recommend you all try it out at least once!
+
+And I'm also curious about your thoughts on MCP.
+Am I just not using it right...?
+
+If there's anyone who uses it well, please leave a comment.
+
+Additionally, when I posted a similar question on Threads,
+I received a good answer about MCP, so I'm sharing it here!!
+
+I think it would be helpful to refer to it!
+
+[Bae Hwi-dong's opinion on MCP](https://www.threads.com/@steady__study.dev/post/DKEV-IRB6jZ?xmt=AQF0JvcEIWGTXXfZ4X8jmQSj_uykzZXPpYNfeMNoXT8ycA)

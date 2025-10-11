@@ -1,0 +1,37 @@
+---
+title: 'A Recommended Tool for Developers Who Write'
+date: '2025-07-27'
+lastmod: '2025-07-27'
+tags: ['productivity', 'tool']
+draft: false
+summary: 'A CLI spell checker recommended for developers who write.'
+layout: PostSimple
+---
+
+I tend to write almost every day.
+
+Since I write for others to see,
+'spell checking' is essential.
+
+The process of opening a browser
+and finding a spell checker every day
+was so annoying.
+
+But I found the perfect tool.
+
+## hanspell
+
+[hanspell](https://github.com/9beach/hanspell) is a Korean spell checker that uses the web services of Daum and Pusan National University's Artificial Intelligence Lab / Narainfotech, Inc.
+
+A major advantage is that it can be run from the CLI.
+
+I use it with an alias.
+
+```shell
+$ alias spell-check="pbpaste | hanspell-cli"
+```
+
+> pbpaste | hanspell-cli -> Corrects the sentence copied to the clipboard in a Mac environment.
+
+Now, I can copy with cmd + c,
+open the terminal, and type the command "spell-check" to correct the sentence.
