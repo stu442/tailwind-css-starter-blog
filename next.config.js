@@ -1,8 +1,15 @@
+/* eslint-disable */
 const { withContentlayer } = require('next-contentlayer2')
 
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 })
+
+// next-intl config start
+const createNextIntlPlugin = require('next-intl/plugin')
+
+const withNextIntl = createNextIntlPlugin()
+// next-intl config end
 
 // You might need to insert additional domains in script-src if you are using external services
 const ContentSecurityPolicy = `
@@ -62,7 +69,7 @@ const unoptimized = process.env.UNOPTIMIZED ? true : undefined
  * @type {import('next/dist/next-server/server/config').NextConfig}
  **/
 module.exports = () => {
-  const plugins = [withContentlayer, withBundleAnalyzer]
+  const plugins = [withNextIntl, withContentlayer, withBundleAnalyzer]
   return plugins.reduce((acc, next) => next(acc), {
     output,
     basePath,
