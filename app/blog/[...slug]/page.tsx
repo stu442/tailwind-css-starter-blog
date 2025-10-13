@@ -1,7 +1,6 @@
 import 'css/prism.css'
 import 'katex/dist/katex.css'
 
-import PageTitle from '@/components/PageTitle'
 import { components } from '@/components/MDXComponents'
 import { MDXLayoutRenderer } from 'pliny/mdx-components'
 import { sortPosts, coreContent, allCoreContent } from 'pliny/utils/contentlayer'
@@ -13,6 +12,7 @@ import PostBanner from '@/layouts/PostBanner'
 import { Metadata } from 'next'
 import siteMetadata from '@/data/siteMetadata'
 import { notFound } from 'next/navigation'
+import { filterPostsByLocale, resolveLocaleFromSlug } from '@/lib/posts'
 
 const defaultLayout = 'PostLayout'
 const layouts = {
@@ -81,14 +81,23 @@ export default async function Page(props: { params: Promise<{ slug: string[] }> 
   const params = await props.params
   const slug = decodeURI(params.slug.join('/'))
   // Filter out drafts in production
-  const sortedCoreContents = allCoreContent(sortPosts(allBlogs))
+  const sortedPosts = sortPosts(allBlogs)
+  const sortedCoreContents = allCoreContent(sortedPosts)
   const postIndex = sortedCoreContents.findIndex((p) => p.slug === slug)
   if (postIndex === -1) {
     return notFound()
   }
 
-  const prev = sortedCoreContents[postIndex + 1]
-  const next = sortedCoreContents[postIndex - 1]
+  const currentLocale = resolveLocaleFromSlug(slug)
+  const localizedPosts = filterPostsByLocale(sortedCoreContents, currentLocale)
+  const localizedIndex = localizedPosts.findIndex((p) => p.slug === slug)
+
+  if (localizedIndex === -1) {
+    return notFound()
+  }
+
+  const prev = localizedPosts[localizedIndex + 1]
+  const next = localizedPosts[localizedIndex - 1]
   const post = allBlogs.find((p) => p.slug === slug) as Blog
   const authorList = post?.authors || ['default']
   const authorDetails = authorList.map((author) => {
