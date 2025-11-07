@@ -36,6 +36,9 @@
   --color-gray-900: oklch(0.21 0.034 264.665);
   --color-gray-950: oklch(0.13 0.028 261.692);
 
+  /* Accent color for emphasis */
+  --color-accent-pink: #ec4899;
+
   /* Line heights */
   --line-height-11: 2.75rem;
   --line-height-12: 3rem;
@@ -99,6 +102,9 @@
     & :where(code):not(pre code) {
       color: var(--color-indigo-500);
     }
+    & :where(strong, em) {
+      color: var(--color-accent-pink);
+    }
   }
 
   .prose-invert {
@@ -113,6 +119,9 @@
     }
     & :where(h1, h2, h3, h4, h5, h6) {
       color: var(--color-gray-100);
+    }
+    & :where(strong, em) {
+      color: var(--color-accent-pink);
     }
   }
 }
