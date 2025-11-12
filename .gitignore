@@ -15,12 +15,13 @@
 # next.js
 /.next/
 /out/
-public/sitemap.xml
 .vercel
 
 # production
 /build
 *.xml
+!app/sitemap.xml/
+!app/sitemap.xml/**
 
 # rss feed
 /public/feed.xml
