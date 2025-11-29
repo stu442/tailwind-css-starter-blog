@@ -71,7 +71,7 @@ const YoutubeEmbed = ({ url, title = 'YouTube video player' }: YoutubeEmbedProps
         <iframe
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
-          className="absolute left-0 top-0 h-full w-full"
+          className="absolute top-0 left-0 h-full w-full"
           referrerPolicy="strict-origin-when-cross-origin"
           src={embedUrl}
           title={title}
