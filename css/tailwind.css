@@ -60,6 +60,7 @@
   color utility to any element that depends on these defaults.
 */
 @layer base {
+
   *,
   ::after,
   ::before,
@@ -85,47 +86,69 @@
   .prose {
     & a {
       color: var(--color-primary-500);
+
       &:hover {
         color: var(--color-primary-600);
       }
+
       & code {
         color: var(--color-primary-400);
       }
     }
+
     & :where(h1, h2) {
       font-weight: 700;
       letter-spacing: var(--tracking-tight);
     }
+
     & h3 {
       font-weight: 600;
     }
+
     & :where(code):not(pre code) {
       color: var(--color-indigo-500);
     }
+
     & :where(strong, em) {
       color: var(--color-accent-pink);
     }
+
     & blockquote p:first-of-type::before {
       content: none;
     }
+
     & blockquote p:last-of-type::after {
       content: none;
+    }
+
+    & ul {
+      margin-top: 0.1em;
+      margin-bottom: 0.1em;
+    }
+
+    & li {
+      margin-top: 0.3em;
+      margin-bottom: 0.3em;
     }
   }
 
   .prose-invert {
     & a {
       color: var(--color-primary-500);
+
       &:hover {
         color: var(--color-primary-400);
       }
+
       & code {
         color: var(--color-primary-400);
       }
     }
+
     & :where(h1, h2, h3, h4, h5, h6) {
       color: var(--color-gray-100);
     }
+
     & :where(strong, em) {
       color: var(--color-accent-pink);
     }
@@ -157,8 +180,10 @@
 }
 
 .no-scrollbar {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
 /* https://stackoverflow.com/questions/61083813/how-to-avoid-internal-autofill-selected-style-to-be-applied */
