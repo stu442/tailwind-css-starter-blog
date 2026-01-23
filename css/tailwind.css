@@ -105,6 +105,12 @@
     & :where(strong, em) {
       color: var(--color-accent-pink);
     }
+    & blockquote p:first-of-type::before {
+      content: none;
+    }
+    & blockquote p:last-of-type::after {
+      content: none;
+    }
   }
 
   .prose-invert {
