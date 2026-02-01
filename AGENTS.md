@@ -18,6 +18,14 @@
 - `yarn analyze` opens bundle stats for performance budgeting.
 - `yarn newsletter:preview` starts the React Email preview server during template work.
 
+## Newsletter Sending (Manual)
+
+- Requires `.env`/`.env.local` with `RESEND_API_KEY`, `RESEND_AUDIENCE_ID`.
+- Test send (single recipient): `yarn newsletter:send <slug|title> --test you@example.com`.
+- Full send (all active subscribers): `yarn newsletter:send <slug|title>`.
+- Optional note (shown under greeting): `--note "추가 문구"`.
+- Send delay (ms) between recipients: `--delay 1000` (default 1000ms).
+
 ## Coding Style & Naming Conventions
 
 - Keep React/TypeScript components in PascalCase files; name hooks and utilities in camelCase.
