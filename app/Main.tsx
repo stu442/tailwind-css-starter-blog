@@ -3,7 +3,6 @@ import Tag from '@/components/Tag'
 import ReadingTime from '@/components/ReadingTime'
 import siteMetadata from '@/data/siteMetadata'
 import { formatDate } from 'pliny/utils/formatDate'
-import CustomNewsletterForm from '@/components/CustomNewsletterForm'
 
 const MAX_DISPLAY = 5
 
@@ -83,11 +82,6 @@ export default function Home({ posts }) {
           >
             All Posts &rarr;
           </Link>
-        </div>
-      )}
-      {siteMetadata.newsletter?.provider && (
-        <div className="flex items-center justify-center pt-4">
-          <CustomNewsletterForm />
         </div>
       )}
     </>
