@@ -127,7 +127,7 @@ function generateUnsubscribeUrl(email, baseUrl = 'https://frogsoo.vercel.app') {
 }
 
 // 이메일 HTML 생성 (React Email 컴포넌트 사용)
-async function generateEmailHtml(post, email) {
+async function generateEmailHtml(post, email, extraMessage) {
   const unsubscribeUrl = generateUnsubscribeUrl(email)
 
   // 날짜 포맷팅
@@ -153,6 +153,7 @@ async function generateEmailHtml(post, email) {
         postUrl,
         postDate,
         unsubscribeUrl,
+        extraMessage,
         blogName: '@dev_frogsoo.blog',
         authorName: 'dev_frogsoo',
       })
@@ -163,12 +164,15 @@ async function generateEmailHtml(post, email) {
     console.error('React Email 컴포넌트 로드 실패:', error.message)
 
     // React Email 컴포넌트 로드에 실패할 경우 fallback HTML 생성
-    return generateFallbackEmailHtml(post, postUrl, postDate, unsubscribeUrl)
+    return generateFallbackEmailHtml(post, postUrl, postDate, unsubscribeUrl, extraMessage)
   }
 }
 
 // Fallback HTML 이메일 템플릿 (React Email 컴포넌트 로드 실패 시 사용)
-function generateFallbackEmailHtml(post, postUrl, postDate, unsubscribeUrl) {
+function generateFallbackEmailHtml(post, postUrl, postDate, unsubscribeUrl, extraMessage) {
+  const extraHtml = extraMessage
+    ? `<p style="color: #666; font-size: 14px; line-height: 24px; margin: 8px 0 0 0;">${extraMessage}</p>`
+    : ''
   return `
 <!DOCTYPE html>
 <html>
@@ -209,8 +213,9 @@ function generateFallbackEmailHtml(post, postUrl, postDate, unsubscribeUrl) {
       
       <p style="color: #666; font-size: 14px; line-height: 24px; margin: 16px 0;">
         안녕하세요! dev_frogsoo입니다.<br>
-        새로운 글을 발행했습니다. 지금 확인해보세요.
+        새로운 글을 작성했어요. 읽어보실래요?
       </p>
+      ${extraHtml}
     </div>
 
     <div style="padding: 0 48px;">
@@ -231,12 +236,12 @@ function generateFallbackEmailHtml(post, postUrl, postDate, unsubscribeUrl) {
 }
 
 // 이메일 발송
-async function sendNotificationEmail(post, email, isTest = false) {
+async function sendNotificationEmail(post, email, isTest = false, extraMessage) {
   const resend = new Resend(process.env.RESEND_API_KEY)
 
   try {
     // React Email 컴포넌트로 HTML 생성
-    const emailHtml = await generateEmailHtml(post, email)
+    const emailHtml = await generateEmailHtml(post, email, extraMessage)
 
     if (isTest) {
       console.log('🔍 HTML 미리보기 (처음 100자):', emailHtml.substring(0, 100) + '...')
@@ -244,7 +249,7 @@ async function sendNotificationEmail(post, email, isTest = false) {
 
     // 이메일 발송 요청 (Resend 기본 도메인 사용)
     const emailData = {
-      from: 'dev_frogsoo <stu44229@gmail.com>',
+      from: 'dev_frogsoo <miles@frogsoo.xyz>',
       to: email,
       subject: `${isTest ? '[테스트] ' : ''}📝 새 글: ${post.title}`,
       html: emailHtml,
@@ -300,6 +305,10 @@ async function sendNotificationEmail(post, email, isTest = false) {
   }
 }
 
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
 // 글 목록 출력
 function listPosts(posts) {
   console.log('\n📝 블로그 글 목록:')
@@ -352,9 +361,9 @@ function listSubscribers(subscribers) {
 }
 
 // 이메일 미리보기 생성
-async function generateEmailPreview(post) {
+async function generateEmailPreview(post, extraMessage) {
   const testEmail = 'preview@example.com'
-  const emailHtml = await generateEmailHtml(post, testEmail)
+  const emailHtml = await generateEmailHtml(post, testEmail, extraMessage)
 
   // 임시 디렉토리 생성 (없으면)
   const tempDir = join(__dirname, '../.temp')
@@ -436,6 +445,8 @@ async function main() {
   yarn newsletter:help                      # 도움말 보기
   yarn newsletter:send <글> --test <이메일>   # 테스트 발송
   yarn newsletter:send <글> --preview       # 이메일 미리보기
+  yarn newsletter:send <글> --note "<문구>" # 인사말 아래 추가 문구
+  yarn newsletter:send <글> --delay <ms>    # 발송 간 딜레이 (ms)
   yarn newsletter:send --verify             # Resend API 연결 테스트
   yarn newsletter:dev                       # React Email 개발 서버
 
@@ -446,6 +457,8 @@ async function main() {
   yarn newsletter:subscribers               # 구독자 목록
   yarn newsletter:send cute-go --test test@example.com  # 테스트 발송
   yarn newsletter:send cute-go --preview    # 이메일 미리보기
+  yarn newsletter:send cute-go --note "추가 문구"       # 추가 문구
+  yarn newsletter:send cute-go --delay 700             # 발송 간 딜레이
   yarn newsletter:send --verify             # API 연결 및 도메인 확인
   yarn newsletter:dev                       # React Email 개발 서버 실행
 
@@ -503,11 +516,24 @@ async function main() {
     process.exit(1)
   }
 
+  // 추가 문구 (인사말 아래)
+  let extraMessage = ''
+  const noteIndex = args.indexOf('--note')
+  if (noteIndex !== -1 && args[noteIndex + 1]) {
+    extraMessage = args[noteIndex + 1]
+  }
+
+  // 발송 딜레이 (ms)
+  const delayIndex = args.indexOf('--delay')
+  const delayMs =
+    delayIndex !== -1 && args[delayIndex + 1] ? Number(args[delayIndex + 1]) : 1000
+  const safeDelayMs = Number.isFinite(delayMs) && delayMs >= 0 ? delayMs : 1000
+
   // 미리보기 생성
   if (args.includes('--preview')) {
     console.log(`🎨 "${post.title}" 이메일 미리보기 생성 중...`)
     try {
-      await generateEmailPreview(post)
+      await generateEmailPreview(post, extraMessage)
     } catch (error) {
       console.error('❌ 미리보기 생성 실패:', error.message)
       process.exit(1)
@@ -525,7 +551,7 @@ async function main() {
     console.log(`📧 테스트 이메일 발송 중... (${testEmail})`)
 
     try {
-      await sendNotificationEmail(post, testEmail, true)
+      await sendNotificationEmail(post, testEmail, true, extraMessage)
       console.log('✅ 테스트 이메일이 성공적으로 발송되었습니다!')
     } catch (error) {
       console.error('❌ 테스트 이메일 발송 실패:', error.message)
@@ -591,7 +617,7 @@ async function main() {
 
   for (const subscriber of activeSubscribers) {
     try {
-      await sendNotificationEmail(post, subscriber.email)
+      await sendNotificationEmail(post, subscriber.email, false, extraMessage)
       successCount++
       process.stdout.write(`✅ ${successCount}/${activeSubscribers.length}\r`)
     } catch (error) {
@@ -601,6 +627,10 @@ async function main() {
       process.stdout.write(
         `❌ 실패: ${errorCount}, 성공: ${successCount}/${activeSubscribers.length}\r`
       )
+    }
+
+    if (safeDelayMs > 0) {
+      await sleep(safeDelayMs)
     }
   }
 
