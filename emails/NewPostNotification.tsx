@@ -19,6 +19,7 @@ interface NewPostNotificationProps {
   postUrl: string
   postDate: string
   unsubscribeUrl: string
+  extraMessage?: string
   blogName?: string
   authorName?: string
 }
@@ -29,6 +30,7 @@ export default function NewPostNotification({
   postUrl = 'https://frogsoo.vercel.app/',
   postDate = new Date().toLocaleDateString('ko-KR'),
   unsubscribeUrl = 'https://frogsoo.vercel.app/unsubscribe',
+  extraMessage,
   blogName = '@dev_frogsoo.blog',
   authorName = 'dev_frogsoo',
 }: NewPostNotificationProps) {
@@ -76,8 +78,9 @@ export default function NewPostNotification({
             
             <Text style={footer}>
               안녕하세요! {authorName}입니다.<br />
-              새로운 글을 발행했으니 한번 읽어보시면 좋을 것 같아요.
+              새로운 글을 작성했어요. 읽어보실래요?
             </Text>
+            {extraMessage ? <Text style={extra}>{extraMessage}</Text> : null}
           </Section>
 
           <Section style={unsubscribeSection}>
@@ -185,6 +188,13 @@ const footer = {
   fontSize: '14px',
   lineHeight: '24px',
   margin: '16px 0',
+}
+
+const extra = {
+  color: '#666',
+  fontSize: '14px',
+  lineHeight: '24px',
+  margin: '8px 0 0 0',
 }
 
 const unsubscribeSection = {
