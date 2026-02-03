@@ -525,8 +525,7 @@ async function main() {
 
   // 발송 딜레이 (ms)
   const delayIndex = args.indexOf('--delay')
-  const delayMs =
-    delayIndex !== -1 && args[delayIndex + 1] ? Number(args[delayIndex + 1]) : 1000
+  const delayMs = delayIndex !== -1 && args[delayIndex + 1] ? Number(args[delayIndex + 1]) : 1000
   const safeDelayMs = Number.isFinite(delayMs) && delayMs >= 0 ? delayMs : 1000
 
   // 미리보기 생성
