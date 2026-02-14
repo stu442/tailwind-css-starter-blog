@@ -12,15 +12,17 @@ import ScrollTopAndComment from '@/components/ScrollTopAndComment'
 import ReadingTime from '@/components/ReadingTime'
 import ProgressBar from '@/components/ProgressBar'
 import { formatDate } from 'pliny/utils/formatDate'
+import type { SeriesInfo } from '@/lib/series'
 
 interface LayoutProps {
   content: CoreContent<Blog>
   children: ReactNode
   next?: { path: string; title: string }
   prev?: { path: string; title: string }
+  series?: SeriesInfo
 }
 
-export default function PostMinimal({ content, next, prev, children }: LayoutProps) {
+export default function PostMinimal({ content, next, prev, series, children }: LayoutProps) {
   const { slug, title, images, date, readingTime } = content
   const displayImage =
     images && images.length > 0 ? images[0] : 'https://picsum.photos/seed/picsum/800/400'
@@ -48,6 +50,17 @@ export default function PostMinimal({ content, next, prev, children }: LayoutPro
                   <ReadingTime readingTime={readingTime} />
                 </dd>
               </dl>
+              {series && (
+                <p className="pt-3 text-sm text-gray-500 dark:text-gray-400">
+                  Series:{' '}
+                  <Link
+                    href={`/series/${series.slug}`}
+                    className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+                  >
+                    {series.name}
+                  </Link>
+                </p>
+              )}
             </div>
           </div>
           <div className="prose dark:prose-invert max-w-none py-4">{children}</div>

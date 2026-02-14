@@ -1,6 +1,8 @@
 import { allBlogs } from 'contentlayer/generated'
 import siteMetadata from '@/data/siteMetadata'
 import { joinUrl } from '@/lib/utils'
+import { allCoreContent, sortPosts } from 'pliny/utils/contentlayer'
+import { getSeriesGroups } from '@/lib/series'
 
 export const dynamic = 'force-static'
 
@@ -18,7 +20,7 @@ export async function GET() {
   const siteUrl = siteMetadata.siteUrl
   const today = new Date().toISOString()
 
-  const staticRoutes = ['', 'blog', 'tags'].map((route) => ({
+  const staticRoutes = ['', 'blog', 'series', 'tags'].map((route) => ({
     loc: joinUrl(siteUrl, route),
     lastmod: today,
   }))
@@ -30,7 +32,23 @@ export async function GET() {
       lastmod: new Date(post.lastmod || post.date).toISOString(),
     }))
 
-  const urls = [...staticRoutes, ...blogRoutes]
+  const publishedCoreBlogs = allCoreContent(sortPosts([...allBlogs]))
+  const seriesRoutes = getSeriesGroups(publishedCoreBlogs).map((series) => {
+    const lastmod = series.posts.reduce(
+      (latestDate, post) => {
+        const candidateDate = new Date(post.lastmod || post.date).toISOString()
+        return candidateDate > latestDate ? candidateDate : latestDate
+      },
+      new Date(series.posts[0].lastmod || series.posts[0].date).toISOString()
+    )
+
+    return {
+      loc: joinUrl(siteUrl, `series/${series.slug}`),
+      lastmod,
+    }
+  })
+
+  const urls = [...staticRoutes, ...seriesRoutes, ...blogRoutes]
     .map((entry) => buildUrlEntry(entry.loc, entry.lastmod))
     .join('')
 

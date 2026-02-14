@@ -12,6 +12,7 @@ import ScrollTopAndComment from '@/components/ScrollTopAndComment'
 import ReadingTime from '@/components/ReadingTime'
 import ProgressBar from '@/components/ProgressBar'
 import { joinUrl } from '../lib/utils'
+import type { SeriesInfo } from '@/lib/series'
 
 const editUrl = (path) => `${siteMetadata.siteRepo}/blob/main/data/${path}`
 const discussUrl = (path) =>
@@ -29,10 +30,18 @@ interface LayoutProps {
   authorDetails: CoreContent<Authors>[]
   next?: { path: string; title: string }
   prev?: { path: string; title: string }
+  series?: SeriesInfo
   children: ReactNode
 }
 
-export default function PostLayout({ content, authorDetails, next, prev, children }: LayoutProps) {
+export default function PostLayout({
+  content,
+  authorDetails,
+  next,
+  prev,
+  series,
+  children,
+}: LayoutProps) {
   const { filePath, path, slug, date, title, tags, readingTime } = content
   const basePath = path.split('/')[0]
 
@@ -119,6 +128,16 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
             </div>
             <footer>
               <div className="divide-gray-200 text-sm leading-5 font-medium xl:col-start-1 xl:row-start-2 xl:divide-y dark:divide-gray-700">
+                {series && (
+                  <div className="py-4 xl:py-8">
+                    <h2 className="text-xs tracking-wide text-gray-500 uppercase dark:text-gray-400">
+                      Series
+                    </h2>
+                    <div className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400">
+                      <Link href={`/series/${series.slug}`}>{series.name}</Link>
+                    </div>
+                  </div>
+                )}
                 {tags && (
                   <div className="py-4 xl:py-8">
                     <h2 className="text-xs tracking-wide text-gray-500 uppercase dark:text-gray-400">

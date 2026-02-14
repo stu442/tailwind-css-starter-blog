@@ -52,6 +52,17 @@
 - Add posts as MDX in `data/blog` with frontmatter (`title`, `date`, `summary`, `tags`); start `yarn dev` once to regenerate typing.
 - Load analytics and newsletter keys through `.env.local`; call out new env vars in the PR description.
 
+## Series Feature Spec Notes
+
+- Series feature requirements and scope are documented in `.specify/01-series-publishing/SPEC.md`.
+- When writing a series post, use frontmatter keys:
+  - `series`: human-readable series name (string)
+  - `seriesOrder`: order within the series (number)
+- Series routes are planned as:
+  - `/series`
+  - `/series/[slug]`
+- Keep this document (`AGENTS.md`) and `.specify/01-series-publishing/SPEC.md` aligned when scope changes.
+
 ## 명령
 
 - 대답은 한국어로 한다.

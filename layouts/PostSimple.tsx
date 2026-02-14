@@ -10,15 +10,17 @@ import siteMetadata from '@/data/siteMetadata'
 import ScrollTopAndComment from '@/components/ScrollTopAndComment'
 import ReadingTime from '@/components/ReadingTime'
 import ProgressBar from '@/components/ProgressBar'
+import type { SeriesInfo } from '@/lib/series'
 
 interface LayoutProps {
   content: CoreContent<Blog>
   children: ReactNode
   next?: { path: string; title: string }
   prev?: { path: string; title: string }
+  series?: SeriesInfo
 }
 
-export default function PostLayout({ content, next, prev, children }: LayoutProps) {
+export default function PostLayout({ content, next, prev, series, children }: LayoutProps) {
   const { path, slug, date, title, readingTime } = content
 
   return (
@@ -42,6 +44,17 @@ export default function PostLayout({ content, next, prev, children }: LayoutProp
               <div>
                 <PageTitle>{title}</PageTitle>
               </div>
+              {series && (
+                <p className="pt-3 text-sm text-gray-500 dark:text-gray-400">
+                  Series:{' '}
+                  <Link
+                    href={`/series/${series.slug}`}
+                    className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+                  >
+                    {series.name}
+                  </Link>
+                </p>
+              )}
             </div>
           </header>
           <div className="grid-rows-[auto_1fr] divide-y divide-gray-200 pb-8 xl:divide-y-0 dark:divide-gray-700">
